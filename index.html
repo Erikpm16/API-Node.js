@@ -1,0 +1,88 @@
+<!-- https://www.freecodecamp.org/portuguese/news/tutorial-de-apis-rest-client-rest-servicos-rest-e-chamadas-de-api-explicados-com-exemplos-de-codigo/ -->
+
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>REST Client</title>
+  </head>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    .container {
+      height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 20px;
+    }
+    label,
+    input[type="submit"] {
+      margin-top: 20px;
+    }
+  </style>
+  <body>
+    <div class="container">
+      <h1>Renda</h1>
+      </h1>
+      <form>
+        <label>renda anual:</label>
+        <input id="num1" type="number" />
+        <label>retido:</label>
+        <input id="num2" type="number" />
+        <label>dependentes:</label>
+        <input id="num3" type="number" />
+        <label>Custo Saude:</label>
+        <input id="num4" type="number" />
+        <label>Custo Educação:</label>
+        <input id="num5" type="number" />
+        <input type="submit" value="Add"/>
+      </form>
+      <div class="result">Resultado?</div>
+    </div>
+    <script>
+      document.addEventListener("submit", sendData);
+      function sendData(e) {
+        e.preventDefault();
+        const renda_anual = document.querySelector("#num1").value;
+        const retido = document.querySelector("#num2").value;
+        const dependentes = document.querySelector("#num3").value;
+        const custo_saude = document.querySelector("#num4").value;
+        const custo_educacao = document.querySelector("#num5").value;
+
+        fetch("/add", {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            renda_anual: parseInt(renda_anual),
+            retido: parseInt(retido),
+            dependentes: parseInt(dependentes),
+            custo_saude: parseInt(custo_saude),
+            custo_educacao: parseInt(custo_educacao)
+          })
+        })
+          .then(res => res.json())
+          .then(data => {
+            const { result } = data;
+            document.querySelector(
+              ".result"
+            ).innerText = `Resultado: ${result}`;
+          })
+          .catch(err => console.log(err));
+      }
+    </script>
+  </body>
+</html>
